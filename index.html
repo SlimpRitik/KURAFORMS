@@ -5,305 +5,239 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KURA Daily Works Form | KURA/MS/FM/029</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-  :root {
-    --green-dark: #0d4a2a;
-    --green-mid: #1a6b3a;
-    --green-light: #e8f5ee;
-    --green-accent: #2e8b57;
-    --border: #bbb;
-    --border-light: #ddd;
-    --bg: #f7f7f5;
-    --white: #ffffff;
-    --text: #1a1a1a;
-    --text-muted: #555;
-    --cell-bg: #fafaf8;
-    --header-bg: #d4e8dc;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13px;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+:root {
+  --green-dark: #0d4a2a;
+  --green-mid: #1a6b3a;
+  --green-light: #e8f5ee;
+  --green-accent: #2e8b57;
+  --border: #bbb;
+  --bg: #f7f7f5;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --text-muted: #555;
+  --cell-bg: #fafaf8;
+  --header-bg: #d4e8dc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  /* ---- TOP NAV ---- */
-  .topbar {
-    background: var(--green-dark);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 24px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .topbar-logo {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--green-accent); border: 2px solid rgba(255,255,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 600; color: white; letter-spacing: 0.5px;
-  }
-  .topbar-title { font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
-  .topbar-sub { font-size: 11px; opacity: 0.7; margin-top: 1px; }
-  .topbar-actions { display: flex; gap: 10px; }
-  .btn {
-    padding: 7px 18px; border-radius: 5px; font-size: 12px;
-    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
-    cursor: pointer; border: none; transition: all 0.15s;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .btn-outline {
-    background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white;
-  }
-  .btn-outline:hover { background: rgba(255,255,255,0.1); }
-  .btn-primary {
-    background: var(--green-accent); color: white;
-  }
-  .btn-primary:hover { background: #267a4c; transform: translateY(-1px); }
-  .btn-print {
-    background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);
-  }
-  .btn-print:hover { background: rgba(255,255,255,0.25); }
+/* TOPBAR */
+.topbar { background: var(--green-dark); color: white; display: flex; align-items: center; justify-content: space-between; padding: 10px 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 8px; }
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-logo { width: 36px; height: 36px; border-radius: 50%; background: var(--green-accent); border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.topbar-logo img { width: 36px; height: 36px; object-fit: cover; border-radius: 50%; }
+.topbar-title { font-size: 14px; font-weight: 600; }
+.topbar-sub { font-size: 11px; opacity: 0.7; margin-top: 1px; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tbtn { padding: 7px 14px; border-radius: 5px; font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+.tbtn-ghost { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.25); }
+.tbtn-ghost:hover { background: rgba(255,255,255,0.22); }
+.tbtn-green { background: var(--green-accent); color: white; font-weight: 600; }
+.tbtn-green:hover { background: #267a4c; }
+.tbtn-settings { background: transparent; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); }
+.tbtn-settings:hover { color: white; background: rgba(255,255,255,0.1); }
 
-  /* ---- MAIN WRAPPER ---- */
-  .outer { padding: 24px 16px 48px; max-width: 980px; margin: 0 auto; }
+/* LAYOUT */
+.outer { padding: 24px 16px 56px; max-width: 980px; margin: 0 auto; }
+.form-card { background: var(--white); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
 
-  /* ---- FORM CARD ---- */
-  .form-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  }
+/* FORM HEADER */
+.form-header { display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-bottom: 2px solid var(--green-dark); }
+.kura-logo { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--green-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: var(--green-light); }
+.kura-logo img { width: 72px; height: 72px; object-fit: cover; border-radius: 50%; }
+.org-info { flex: 1; }
+.org-name { font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--green-dark); line-height: 1; }
+.org-tagline { font-style: italic; font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+.form-ref { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); line-height: 1.8; }
 
-  /* ---- FORM HEADER ---- */
-  .form-header {
-    display: flex; align-items: center; gap: 18px;
-    padding: 16px 20px; border-bottom: 2px solid var(--green-dark);
-    background: var(--white);
-  }
-  .kura-logo {
-    width: 72px; height: 72px; border-radius: 50%;
-    border: 3px solid var(--green-dark);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; overflow: hidden; background: var(--green-light);
-  }
-  .kura-logo svg { width: 60px; height: 60px; }
-  .org-info { flex: 1; }
-  .org-name {
-    font-size: 24px; font-weight: 600; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--green-dark); line-height: 1;
-  }
-  .org-tagline { font-style: italic; font-size: 13px; color: var(--text-muted); margin-top: 3px; }
-  .form-ref {
-    text-align: right; font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px; color: var(--text-muted); line-height: 1.8;
-  }
+/* TABLES */
+.form-body { padding: 0; }
+table { width: 100%; border-collapse: collapse; }
+td, th { border: 1px solid var(--border); padding: 4px 7px; vertical-align: middle; font-size: 11.5px; }
+th { background: var(--header-bg); font-weight: 600; font-size: 11px; text-align: center; letter-spacing: 0.3px; color: var(--green-dark); }
+.section-title { background: var(--green-dark); color: white; text-align: center; font-weight: 600; font-size: 12px; letter-spacing: 1.5px; padding: 6px; text-transform: uppercase; }
+.label-cell { background: var(--cell-bg); font-weight: 600; font-size: 11px; white-space: nowrap; color: var(--green-dark); }
+.form-title-row { background: var(--green-light); text-align: center; font-size: 15px; font-weight: 700; letter-spacing: 3px; padding: 8px; color: var(--green-dark); text-transform: uppercase; }
+.italic-note { font-style: italic; font-size: 10.5px; color: var(--text-muted); padding: 5px 7px; }
+.section-block { border-top: 2px solid var(--green-dark); }
+.sign-role { background: var(--cell-bg); font-weight: 600; font-size: 11px; color: var(--green-dark); }
 
-  /* ---- TABLES ---- */
-  .form-body { padding: 0; }
-  table { width: 100%; border-collapse: collapse; }
-  td, th {
-    border: 1px solid var(--border);
-    padding: 4px 7px;
-    vertical-align: middle;
-    font-size: 11.5px;
-  }
-  th {
-    background: var(--header-bg);
-    font-weight: 600;
-    font-size: 11px;
-    text-align: center;
-    letter-spacing: 0.3px;
-    color: var(--green-dark);
-  }
-  .section-title {
-    background: var(--green-dark);
-    color: white;
-    text-align: center;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    padding: 6px;
-    text-transform: uppercase;
-  }
-  .label-cell {
-    background: var(--cell-bg);
-    font-weight: 600;
-    font-size: 11px;
-    white-space: nowrap;
-    color: var(--green-dark);
-  }
-  .form-title-row {
-    background: var(--green-light);
-    text-align: center;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    padding: 8px;
-    color: var(--green-dark);
-    text-transform: uppercase;
-  }
-  .italic-note { font-style: italic; font-size: 10.5px; color: var(--text-muted); padding: 5px 7px; }
+/* INPUTS */
+input[type=text], input[type=date], input[type=time] { border: none; outline: none; background: transparent; width: 100%; font-size: 11.5px; font-family: 'IBM Plex Sans', sans-serif; color: var(--text); padding: 1px 2px; }
+input[type=date]::-webkit-calendar-picker-indicator, input[type=time]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+td:has(input):focus-within { background: #f0f8f3; }
+.sheet-inline { display: inline-block; width: 32px; border-bottom: 1.5px solid var(--border); text-align: center; font-size: 11.5px; padding: 0 2px; outline: none; font-family: 'IBM Plex Sans', sans-serif; color: var(--text); background: transparent; border-top: none; border-left: none; border-right: none; }
 
-  /* ---- INPUTS ---- */
-  input[type=text], input[type=date], input[type=time], textarea, select {
-    border: none; outline: none; background: transparent;
-    width: 100%; font-size: 11.5px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    color: var(--text); padding: 1px 2px;
-  }
-  input[type=date]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
-  input[type=time]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
-  td:has(input):focus-within { background: #f0f8f3; }
+/* FORM FOOTER */
+.form-footer { display: flex; justify-content: space-between; padding: 8px 16px; background: var(--green-dark); color: white; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; }
 
-  .sheet-inline {
-    display: inline-block;
-    width: 32px;
-    border-bottom: 1.5px solid var(--border);
-    text-align: center;
-    font-size: 11.5px;
-    padding: 0 2px;
-    outline: none;
-    font-family: 'IBM Plex Sans', sans-serif;
-    color: var(--text);
-    background: transparent;
-    border-top: none; border-left: none; border-right: none;
-  }
+/* ACTION BAR */
+.action-bar { display: flex; justify-content: center; gap: 10px; padding: 20px 0 0; flex-wrap: wrap; }
+.abtn { padding: 11px 20px; border-radius: 5px; font-size: 13px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; border: none; }
+.abtn-clear { background: transparent; border: 1.5px solid var(--border); color: var(--text-muted); }
+.abtn-clear:hover { background: #f0f0f0; }
+.abtn-print { background: #4a3728; color: white; }
+.abtn-print:hover { background: #3a2a1e; }
+.abtn-submit { background: var(--green-dark); color: white; font-weight: 600; }
+.abtn-submit:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,74,42,0.3); }
+.abtn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  /* ---- SECTION SPACING ---- */
-  .section-block { border-top: 2px solid var(--green-dark); }
+/* SPINNER */
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ---- SIGN TABLE ---- */
-  .sign-role { background: var(--cell-bg); font-weight: 600; font-size: 11px; color: var(--green-dark); }
+/* TOAST */
+.toast { display: none; position: fixed; bottom: 24px; right: 24px; background: var(--green-dark); color: white; padding: 13px 20px; border-radius: 7px; font-size: 13px; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.25); max-width: 360px; line-height: 1.55; }
+.toast.err { background: #7a1a1a; }
+.toast.inf { background: #1a3d6e; }
 
-  /* ---- FOOTER BAR ---- */
-  .form-footer {
-    display: flex; justify-content: space-between;
-    padding: 8px 16px; background: var(--green-dark);
-    color: white; font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
-  }
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 10px; padding: 28px 30px; max-width: 530px; width: 100%; box-shadow: 0 12px 48px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-size: 17px; font-weight: 600; color: var(--green-dark); margin-bottom: 5px; }
+.modal-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.55; }
+.modal hr { border: none; border-top: 1px solid #eee; margin: 18px 0; }
+.modal-section { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green-dark); margin-bottom: 10px; }
+.modal label { display: block; font-size: 12px; font-weight: 600; color: #444; margin: 12px 0 3px; }
+.modal input[type=text], .modal input[type=password] { width: 100%; border: 1px solid #ccc; border-radius: 5px; padding: 9px 11px; font-size: 13px; font-family: 'IBM Plex Sans', sans-serif; outline: none; color: var(--text); }
+.modal input:focus { border-color: var(--green-accent); box-shadow: 0 0 0 2px rgba(46,139,87,0.18); }
+.hint { font-size: 11px; color: #888; margin-top: 3px; line-height: 1.45; }
+.modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+.mbtn-save { background: var(--green-dark); color: white; border: none; padding: 9px 26px; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+.mbtn-save:hover { background: var(--green-mid); }
+.mbtn-cancel { background: transparent; border: 1px solid #ccc; color: var(--text-muted); padding: 9px 20px; border-radius: 5px; font-size: 13px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+.mbtn-cancel:hover { background: #f5f5f5; }
+.status-row { display: flex; flex-direction: column; gap: 6px; padding: 14px 0 2px; font-size: 12px; }
+.status-item { display: flex; align-items: center; gap: 8px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+.status-dot.ok { background: #2e8b57; }
+.status-dot.err { background: #c0392b; }
+.status-dot.run { background: #f39c12; animation: pulse 0.8s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.35} }
 
-  /* ---- ACTION BAR ---- */
-  .action-bar {
-    display: flex; justify-content: center; gap: 14px;
-    padding: 20px 0 0;
-  }
-  .btn-clear-main {
-    padding: 10px 28px; border-radius: 5px; font-size: 13px;
-    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
-    cursor: pointer; background: transparent; border: 1.5px solid var(--border);
-    color: var(--text-muted); transition: all 0.15s;
-  }
-  .btn-clear-main:hover { background: #f0f0f0; }
-  .btn-submit-main {
-    padding: 10px 32px; border-radius: 5px; font-size: 13px;
-    font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
-    cursor: pointer; background: var(--green-dark); color: white;
-    border: none; transition: all 0.15s; letter-spacing: 0.3px;
-  }
-  .btn-submit-main:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,74,42,0.25); }
-  .btn-pdf-main {
-    padding: 10px 28px; border-radius: 5px; font-size: 13px;
-    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
-    cursor: pointer; background: #4a3728; color: white;
-    border: none; transition: all 0.15s;
-  }
-  .btn-pdf-main:hover { background: #3a2a1e; transform: translateY(-1px); }
-
-  /* ---- TOAST ---- */
-  .toast {
-    display: none; position: fixed; bottom: 24px; right: 24px;
-    background: var(--green-dark); color: white;
-    padding: 12px 20px; border-radius: 6px;
-    font-size: 13px; z-index: 999;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    animation: slideup 0.25s ease;
-  }
-  @keyframes slideup { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
-  /* ---- PRINT STYLES ---- */
-  @media print {
-    .topbar, .action-bar, .toast { display: none !important; }
-    body { background: white; }
-    .outer { padding: 0; max-width: 100%; }
-    .form-card { box-shadow: none; border: none; }
-    .org-name { font-size: 20px; }
-    td, th { font-size: 10px; }
-    input[type=text], input[type=date], input[type=time] { font-size: 10px; }
-    .section-title { font-size: 11px; padding: 4px; }
-    @page { margin: 10mm; size: A4 portrait; }
-  }
-
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 640px) {
-    .topbar-actions .btn-print { display: none; }
-    .org-name { font-size: 16px; }
-    .form-ref { display: none; }
-  }
+/* PRINT */
+@media print {
+  .topbar, .action-bar, .toast, .modal-overlay { display: none !important; }
+  body { background: white; }
+  .outer { padding: 0; max-width: 100%; }
+  .form-card { box-shadow: none; border: none; }
+  td, th { font-size: 10px; }
+  input[type=text], input[type=date], input[type=time] { font-size: 10px; }
+  @page { margin: 10mm; size: A4 portrait; }
+}
+@media (max-width: 640px) {
+  .org-name { font-size: 16px; }
+  .form-ref { display: none; }
+}
 </style>
 </head>
 <body>
 
-<!-- TOP NAVIGATION -->
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h2>⚙ Configuration</h2>
+    <p class="modal-sub">Saved in your browser. Set once per device — no server needed.</p>
+
+    <div class="modal-section">📧 EmailJS — Send PDF by email</div>
+    <p class="hint" style="margin-bottom:8px;">Sign up free at <strong>emailjs.com</strong>. You need a Service, a Template, and your Public Key.</p>
+
+    <label>Public Key</label>
+    <input type="text" id="cfg_pk" placeholder="e.g. aBcDeFgHiJkLmNoPq">
+    <p class="hint">EmailJS Dashboard → Account → Public Key</p>
+
+    <label>Service ID</label>
+    <input type="text" id="cfg_svc" placeholder="e.g. service_abc123">
+    <p class="hint">EmailJS → Email Services → Service ID</p>
+
+    <label>Template ID</label>
+    <input type="text" id="cfg_tpl" placeholder="e.g. template_xyz789">
+    <p class="hint">EmailJS → Email Templates → Template ID. Template must have variables:<br>
+    <code style="background:#f5f5f5;padding:2px 5px;border-radius:3px;font-size:10px;">{{to_email1}}, {{to_email2}}, {{project_name}}, {{contract_no}}, {{date}}, {{filename}}</code><br>
+    Set <strong>To Email</strong> to <code style="background:#f5f5f5;padding:2px 5px;border-radius:3px;font-size:10px;">{{to_email1}}</code> and add <code style="background:#f5f5f5;padding:2px 5px;border-radius:3px;font-size:10px;">{{to_email2}}</code> in CC.</p>
+
+    <hr>
+
+    <div class="modal-section">🐙 GitHub — Store submitted PDFs</div>
+    <label>Personal Access Token</label>
+    <input type="password" id="cfg_tok" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <p class="hint">GitHub → Settings → Developer Settings → Personal Access Tokens (Classic) → Generate new token → tick <strong>repo</strong> scope</p>
+
+    <label>GitHub Username</label>
+    <input type="text" id="cfg_usr" placeholder="e.g. johndoe">
+
+    <label>Repository Name</label>
+    <input type="text" id="cfg_repo" placeholder="e.g. kura-forms">
+
+    <label>Folder path in repo (optional)</label>
+    <input type="text" id="cfg_dir" placeholder="e.g. submissions   (leave blank for root)">
+
+    <div class="modal-actions">
+      <button class="mbtn-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="mbtn-save" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS MODAL -->
+<div class="modal-overlay" id="progressModal">
+  <div class="modal" style="max-width:380px;">
+    <h2>Submitting Form…</h2>
+    <p class="modal-sub">Please wait while the PDF is generated, saved, and emailed.</p>
+    <div class="status-row" id="statusRows"></div>
+    <div class="modal-actions" style="display:none;" id="progressClose">
+      <button class="mbtn-save" onclick="closeProgress()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOP NAV -->
 <nav class="topbar">
   <div class="topbar-left">
-    <div class="topbar-logo">logo.png</div>
+    <div class="topbar-logo">
+      <img src="logo.png" alt="KURA" onerror="this.style.display='none'">
+    </div>
     <div>
       <div class="topbar-title">Daily Works Report</div>
       <div class="topbar-sub">KURA/MS/FM/029 &nbsp;|&nbsp; Rev. 003</div>
     </div>
   </div>
   <div class="topbar-actions">
-    <button class="btn btn-print" onclick="window.print()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    <button class="tbtn tbtn-settings" onclick="openSettings()">⚙ Settings</button>
+    <button class="tbtn tbtn-ghost" onclick="window.print()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
       Print / PDF
     </button>
-    <button class="btn btn-primary" onclick="submitForm()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-      Submit &amp; Export
+    <button class="tbtn tbtn-green" onclick="handleSubmit()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      Submit
     </button>
   </div>
 </nav>
 
 <div class="outer">
-<div class="form-card">
+<div class="form-card" id="formCard">
 
   <!-- HEADER -->
   <div class="form-header">
     <div class="kura-logo">
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="30" cy="30" r="28" fill="#0d4a2a" stroke="#2e8b57" stroke-width="2"/>
-        <ellipse cx="30" cy="38" rx="18" ry="8" fill="#2e8b57" opacity="0.7"/>
-        <rect x="14" y="28" width="32" height="4" rx="2" fill="#7ec89a"/>
-        <rect x="10" y="32" width="40" height="3" rx="1.5" fill="#5ab07a"/>
-        <text x="30" y="24" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="white">KURA</text>
-        <circle cx="30" cy="30" r="28" fill="none" stroke="#5ab07a" stroke-width="1" opacity="0.5"/>
-      </svg>
+      <img src="logo.png" alt="KURA Logo" onerror="this.style.display='none'">
     </div>
     <div class="org-info">
       <div class="org-name">Kenya Urban Roads Authority</div>
       <div class="org-tagline">Transforming Urban Mobility</div>
     </div>
-    <div class="form-ref">
-      KURA/MS/FM/029<br>
-       <!-- Issue No: 001<br>
-      Rev. No: 003<br>
-      Issue Date: 24/2/2025 -->
-    </div>
+    <div class="form-ref">KURA/MS/FM/029<br>Issue No: 001<br>Rev. No: 003<br>Issue Date: 24/2/2025</div>
   </div>
 
   <div class="form-body">
 
-    <!-- PROJECT INFO TABLE -->
+    <!-- PROJECT INFO -->
     <table>
       <tr>
         <td class="label-cell" rowspan="3" style="width:100px;">Location/<br>Region</td>
@@ -344,11 +278,7 @@
       <table>
         <tr><td colspan="3" class="section-title">Weather</td></tr>
         <tr><td colspan="3" class="italic-note">State significant changes in weather conditions during the day (whether rainy, sunny, temperature or dry) and readings on the rain gauge in mm if any.</td></tr>
-        <tr>
-          <th style="width:160px;">Time Duration</th>
-          <th>Weather Conditions</th>
-          <th style="width:220px;">Remarks</th>
-        </tr>
+        <tr><th style="width:160px;">Time Duration</th><th>Weather Conditions</th><th style="width:220px;">Remarks</th></tr>
         <tr><td style="height:26px;"><input type="text" id="w_time1" placeholder="e.g. 07:00–10:00"></td><td><input type="text" id="w_cond1" placeholder="e.g. Sunny, dry"></td><td><input type="text" id="w_rem1"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="w_time2"></td><td><input type="text" id="w_cond2"></td><td><input type="text" id="w_rem2"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="w_time3"></td><td><input type="text" id="w_cond3"></td><td><input type="text" id="w_rem3"></td></tr>
@@ -367,11 +297,8 @@
           <th rowspan="2" style="width:90px;">Plate No.</th>
           <th colspan="2">Time Deployed</th>
         </tr>
-        <tr>
-          <th style="width:72px;">From</th><th style="width:72px;">To</th>
-          <th style="width:72px;">From</th><th style="width:72px;">To</th>
-        </tr>
-        <tr><td style="height:26px;"><input type="text" id="pe_d1l" placeholder="Equipment description"></td><td><input type="text" id="pe_p1l" placeholder="Plate no."></td><td><input type="time" id="pe_f1l"></td><td><input type="time" id="pe_t1l"></td><td><input type="text" id="pe_d1r"></td><td><input type="text" id="pe_p1r"></td><td><input type="time" id="pe_f1r"></td><td><input type="time" id="pe_t1r"></td></tr>
+        <tr><th style="width:72px;">From</th><th style="width:72px;">To</th><th style="width:72px;">From</th><th style="width:72px;">To</th></tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d1l" placeholder="Equipment description"></td><td><input type="text" id="pe_p1l"></td><td><input type="time" id="pe_f1l"></td><td><input type="time" id="pe_t1l"></td><td><input type="text" id="pe_d1r"></td><td><input type="text" id="pe_p1r"></td><td><input type="time" id="pe_f1r"></td><td><input type="time" id="pe_t1r"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="pe_d2l"></td><td><input type="text" id="pe_p2l"></td><td><input type="time" id="pe_f2l"></td><td><input type="time" id="pe_t2l"></td><td><input type="text" id="pe_d2r"></td><td><input type="text" id="pe_p2r"></td><td><input type="time" id="pe_f2r"></td><td><input type="time" id="pe_t2r"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="pe_d3l"></td><td><input type="text" id="pe_p3l"></td><td><input type="time" id="pe_f3l"></td><td><input type="time" id="pe_t3l"></td><td><input type="text" id="pe_d3r"></td><td><input type="text" id="pe_p3r"></td><td><input type="time" id="pe_f3r"></td><td><input type="time" id="pe_t3r"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="pe_d4l"></td><td><input type="text" id="pe_p4l"></td><td><input type="time" id="pe_f4l"></td><td><input type="time" id="pe_t4l"></td><td><input type="text" id="pe_d4r"></td><td><input type="text" id="pe_p4r"></td><td><input type="time" id="pe_f4r"></td><td><input type="time" id="pe_t4r"></td></tr>
@@ -404,12 +331,7 @@
     <div class="section-block">
       <table>
         <tr><td colspan="4" class="section-title">Labour</td></tr>
-        <tr>
-          <th style="width:240px;">Personnel</th>
-          <th style="width:80px;">No.</th>
-          <th style="width:240px;">Personnel</th>
-          <th style="width:80px;">No.</th>
-        </tr>
+        <tr><th style="width:240px;">Personnel</th><th style="width:80px;">No.</th><th style="width:240px;">Personnel</th><th style="width:80px;">No.</th></tr>
         <tr><td style="height:26px;"><input type="text" id="l_p1l" placeholder="e.g. Skilled labourers"></td><td><input type="text" id="l_n1l" placeholder="0"></td><td><input type="text" id="l_p1r"></td><td><input type="text" id="l_n1r" placeholder="0"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="l_p2l"></td><td><input type="text" id="l_n2l"></td><td><input type="text" id="l_p2r"></td><td><input type="text" id="l_n2r"></td></tr>
         <tr><td style="height:26px;"><input type="text" id="l_p3l"></td><td><input type="text" id="l_n3l"></td><td><input type="text" id="l_p3r"></td><td><input type="text" id="l_n3r"></td></tr>
@@ -423,15 +345,8 @@
     <div class="section-block">
       <table>
         <tr><td colspan="4" class="section-title">Operations</td></tr>
-        <tr>
-          <th colspan="2" style="width:180px;">Chainage</th>
-          <th rowspan="2">Activity Description</th>
-          <th rowspan="2" style="width:200px;">Remarks</th>
-        </tr>
-        <tr>
-          <th style="width:90px;">From</th>
-          <th style="width:90px;">To</th>
-        </tr>
+        <tr><th colspan="2" style="width:180px;">Chainage</th><th rowspan="2">Activity Description</th><th rowspan="2" style="width:200px;">Remarks</th></tr>
+        <tr><th style="width:90px;">From</th><th style="width:90px;">To</th></tr>
         <tr><td style="height:28px;"><input type="text" id="op_f1" placeholder="From"></td><td><input type="text" id="op_t1" placeholder="To"></td><td><input type="text" id="op_a1" placeholder="Activity description"></td><td><input type="text" id="op_r1"></td></tr>
         <tr><td style="height:28px;"><input type="text" id="op_f2"></td><td><input type="text" id="op_t2"></td><td><input type="text" id="op_a2"></td><td><input type="text" id="op_r2"></td></tr>
         <tr><td style="height:28px;"><input type="text" id="op_f3"></td><td><input type="text" id="op_t3"></td><td><input type="text" id="op_a3"></td><td><input type="text" id="op_r3"></td></tr>
@@ -444,12 +359,7 @@
     <!-- SIGNATURES -->
     <div class="section-block">
       <table>
-        <tr>
-          <th style="width:100px;"></th>
-          <th style="width:210px;">Name</th>
-          <th style="width:210px;">Sign</th>
-          <th>Date</th>
-        </tr>
+        <tr><th style="width:100px;"></th><th style="width:210px;">Name</th><th style="width:210px;">Sign</th><th>Date</th></tr>
         <tr>
           <td class="sign-role">Inspector</td>
           <td><input type="text" id="insp_name" placeholder="Full name"></td>
@@ -473,105 +383,307 @@
 
   </div><!-- /form-body -->
 
-  <!-- FORM FOOTER -->
   <div class="form-footer">
-    <span>ISSUE NO: 001</span>
-    <span>REV. NO: 003</span>
-    <span>ISSUE DATE: 24/2/2025</span>
+    <span>ISSUE NO: 001</span><span>REV. NO: 003</span><span>ISSUE DATE: 24/2/2025</span>
   </div>
 
 </div><!-- /form-card -->
 
 <!-- ACTION BUTTONS -->
 <div class="action-bar">
-  <button class="btn-clear-main" onclick="clearForm()">Clear Form</button>
-  <button class="btn-pdf-main" onclick="window.print()">
-    🖨 Print / Save as PDF
+  <button class="abtn abtn-clear" onclick="clearForm()">✕ Clear Form</button>
+  <button class="abtn abtn-print" onclick="window.print()">🖨 Print / PDF</button>
+  <button class="abtn abtn-submit" id="btnSubmit" onclick="handleSubmit()">
+    <span id="btnLbl">✉ Email PDF &amp; Save to GitHub</span>
+    <div class="spinner" id="btnSpin"></div>
   </button>
-  <button class="btn-submit-main" onclick="submitForm()">✓ Submit &amp; Export JSON</button>
 </div>
 
 </div><!-- /outer -->
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-function g(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; }
+/* ──────────────────── UTILITIES ──────────────────── */
+var g = function(id){ var e=document.getElementById(id); return e?e.value.trim():''; };
 
-function showToast(msg){
+function toast(msg,type){
   var t=document.getElementById('toast');
-  t.textContent=msg; t.style.display='block';
-  setTimeout(function(){ t.style.display='none'; }, 3500);
+  t.className='toast'+(type?' '+type:'');
+  t.innerHTML=msg; t.style.display='block';
+  clearTimeout(t._t); t._t=setTimeout(function(){t.style.display='none';},6000);
 }
 
+function setLoading(on){
+  document.getElementById('btnLbl').style.display=on?'none':'inline';
+  document.getElementById('btnSpin').style.display=on?'block':'none';
+  document.getElementById('btnSubmit').disabled=on;
+}
+
+/* ──────────────────── SETTINGS ──────────────────── */
+function cfg(){ try{return JSON.parse(localStorage.getItem('kura_cfg')||'{}');}catch(e){return{};} }
+
+function openSettings(){
+  var c=cfg();
+  document.getElementById('cfg_pk').value   =c.pk   ||'';
+  document.getElementById('cfg_svc').value  =c.svc  ||'';
+  document.getElementById('cfg_tpl').value  =c.tpl  ||'';
+  document.getElementById('cfg_tok').value  =c.tok  ||'';
+  document.getElementById('cfg_usr').value  =c.usr  ||'';
+  document.getElementById('cfg_repo').value =c.repo ||'';
+  document.getElementById('cfg_dir').value  =c.dir  ||'';
+  document.getElementById('settingsModal').classList.add('open');
+}
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
+function saveSettings(){
+  var c={
+    pk:  document.getElementById('cfg_pk').value.trim(),
+    svc: document.getElementById('cfg_svc').value.trim(),
+    tpl: document.getElementById('cfg_tpl').value.trim(),
+    tok: document.getElementById('cfg_tok').value.trim(),
+    usr: document.getElementById('cfg_usr').value.trim(),
+    repo:document.getElementById('cfg_repo').value.trim(),
+    dir: document.getElementById('cfg_dir').value.trim()
+  };
+  localStorage.setItem('kura_cfg',JSON.stringify(c));
+  closeSettings();
+  toast('✓ Settings saved successfully.','');
+}
+
+/* ──────────────────── PROGRESS MODAL ──────────────────── */
+var steps=[];
+function openProgress(){
+  steps=[];
+  document.getElementById('statusRows').innerHTML='';
+  document.getElementById('progressClose').style.display='none';
+  document.getElementById('progressModal').classList.add('open');
+}
+function addStep(label){
+  var id='step_'+steps.length;
+  steps.push(id);
+  var div=document.createElement('div');
+  div.className='status-item';
+  div.id=id;
+  div.innerHTML='<div class="status-dot run" id="'+id+'_dot"></div><span id="'+id+'_lbl">'+label+'</span>';
+  document.getElementById('statusRows').appendChild(div);
+  return id;
+}
+function resolveStep(id,ok,msg){
+  var dot=document.getElementById(id+'_dot');
+  var lbl=document.getElementById(id+'_lbl');
+  if(dot) dot.className='status-dot '+(ok?'ok':'err');
+  if(lbl && msg) lbl.textContent=msg;
+}
+function closeProgress(){ document.getElementById('progressModal').classList.remove('open'); }
+function showProgressClose(){ document.getElementById('progressClose').style.display='flex'; }
+
+/* ──────────────────── COLLECT DATA ──────────────────── */
+function collectData(){
+  var d={
+    meta:{form:'KURA/MS/FM/029',issue:'001',rev:'003',issue_date:'24/2/2025'},
+    location:g('location'),day:g('day'),date:g('date'),
+    project_name:g('project_name'),contract_no:g('contract_no'),contractor:g('contractor'),
+    sheet_no:g('sheet_no'),sheet_of:g('sheet_of'),
+    time_from:g('time_from'),time_to:g('time_to'),
+    weather:[],plant_equipment:[],materials:[],labour:[],operations:[],
+    signatures:{
+      inspector:{name:g('insp_name'),sign:g('insp_sign'),date:g('insp_date')},
+      site_agent:{name:g('agent_name'),sign:g('agent_sign'),date:g('agent_date')},
+      re_are:{name:g('re_name'),sign:g('re_sign'),date:g('re_date')}
+    },
+    submitted_at:new Date().toISOString()
+  };
+  for(var wi=1;wi<=3;wi++){var t=g('w_time'+wi),c=g('w_cond'+wi),r=g('w_rem'+wi);if(t||c||r)d.weather.push({time_duration:t,conditions:c,remarks:r});}
+  ['l','r'].forEach(function(s){for(var i=1;i<=5;i++){var a=g('pe_d'+i+s),b=g('pe_p'+i+s);if(a||b)d.plant_equipment.push({description:a,plate_no:b,from:g('pe_f'+i+s),to:g('pe_t'+i+s)});}});
+  for(var mi=1;mi<=5;mi++){var md=g('m_d'+mi);if(md)d.materials.push({description:md,unit:g('m_u'+mi),truck_plate:g('m_p'+mi),capacity_m3:g('m_c'+mi),frequency:g('m_f'+mi),total_qty_del:g('m_q'+mi),remarks:g('m_r'+mi)});}
+  ['l','r'].forEach(function(s){for(var i=1;i<=6;i++){var p=g('l_p'+i+s);if(p)d.labour.push({personnel:p,number:g('l_n'+i+s)});}});
+  for(var oi=1;oi<=6;oi++){var oa=g('op_a'+oi);if(oa)d.operations.push({chainage_from:g('op_f'+oi),chainage_to:g('op_t'+oi),activity:oa,remarks:g('op_r'+oi)});}
+  return d;
+}
+
+/* ──────────────────── GENERATE PDF ──────────────────── */
+function generatePDF(data){
+  var doc=new jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var W=210,m=12;
+
+  /* Header */
+  doc.setFillColor(13,74,42); doc.rect(0,0,W,22,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont('helvetica','bold');
+  doc.text('KENYA URBAN ROADS AUTHORITY',W/2,10,{align:'center'});
+  doc.setFontSize(9); doc.setFont('helvetica','italic');
+  doc.text('Transforming Urban Mobility',W/2,16,{align:'center'});
+  doc.setFillColor(212,232,220); doc.rect(0,22,W,8,'F');
+  doc.setTextColor(13,74,42); doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('DAILY WORKS REPORT',W/2,27.5,{align:'center'});
+  doc.setTextColor(80,80,80); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('KURA/MS/FM/029  |  Issue 001  |  Rev. 003  |  24/2/2025',W/2,33,{align:'center'});
+
+  /* Project info */
+  doc.autoTable({
+    startY:36,margin:{left:m,right:m},
+    body:[
+      ['Location/Region',data.location,'Day',data.day],
+      ['Project Name',data.project_name,'Date',data.date],
+      ['Contract No.',data.contract_no,'Contractor',data.contractor],
+      ['Time of Operation','From: '+(data.time_from||'')+'   To: '+(data.time_to||''),'Sheet No.',data.sheet_no+' of '+data.sheet_of]
+    ],
+    columnStyles:{0:{cellWidth:32,fontStyle:'bold',fillColor:[250,250,248],textColor:[13,74,42]},1:{cellWidth:64},2:{cellWidth:30,fontStyle:'bold',fillColor:[250,250,248],textColor:[13,74,42]},3:{cellWidth:60}},
+    styles:{fontSize:9,cellPadding:2.5,lineColor:[187,187,187],lineWidth:0.3},theme:'grid'
+  });
+
+  function sec(title,head,body,cols){
+    doc.autoTable({
+      startY:doc.lastAutoTable.finalY+1,margin:{left:m,right:m},
+      head:[[{content:title,colSpan:head[0].length,styles:{fillColor:[13,74,42],textColor:[255,255,255],fontStyle:'bold',halign:'center',fontSize:10}}],head],
+      body:body.length?body:[Array(head[0].length).fill('')],
+      columnStyles:cols||{},
+      headStyles:{fillColor:[212,232,220],textColor:[13,74,42],fontStyle:'bold',fontSize:8.5},
+      styles:{fontSize:8.5,cellPadding:2,lineColor:[187,187,187],lineWidth:0.3},theme:'grid'
+    });
+  }
+
+  /* Weather */
+  sec('WEATHER',[['Time Duration','Weather Conditions','Remarks']],
+    data.weather.length?data.weather.map(function(w){return[w.time_duration,w.conditions,w.remarks];}): [['','','']],
+    {0:{cellWidth:40},2:{cellWidth:55}});
+
+  /* Plant & Equipment — pair up rows */
+  var peRows=[];
+  for(var i=0;i<data.plant_equipment.length;i+=2){
+    var a=data.plant_equipment[i]||{},b=data.plant_equipment[i+1]||{};
+    peRows.push([a.description||'',a.plate_no||'',a.from||'',a.to||'',b.description||'',b.plate_no||'',b.from||'',b.to||'']);
+  }
+  sec('PLANT AND EQUIPMENT',[['Description','Plate No.','From','To','Description','Plate No.','From','To']],
+    peRows.length?peRows:[['','','','','','','','']],
+    {0:{cellWidth:36},1:{cellWidth:22},2:{cellWidth:16},3:{cellWidth:16},4:{cellWidth:36},5:{cellWidth:22},6:{cellWidth:16},7:{cellWidth:16}});
+
+  /* Materials */
+  sec('MATERIALS DELIVERED TO SITE',[['Description','Unit','Truck Plate','Capacity M³','Freq','Total Qty','Remarks']],
+    data.materials.length?data.materials.map(function(m){return[m.description,m.unit,m.truck_plate,m.capacity_m3,m.frequency,m.total_qty_del,m.remarks];}): [['','','','','','','']],
+    {0:{cellWidth:38},6:{cellWidth:30}});
+
+  /* Labour */
+  var labRows=[];
+  for(var i=0;i<data.labour.length;i+=2){
+    var a=data.labour[i]||{},b=data.labour[i+1]||{};
+    labRows.push([a.personnel||'',a.number||'',b.personnel||'',b.number||'']);
+  }
+  sec('LABOUR',[['Personnel','No.','Personnel','No.']],
+    labRows.length?labRows:[['','','','']],
+    {0:{cellWidth:67},1:{cellWidth:22},2:{cellWidth:67},3:{cellWidth:22}});
+
+  /* Operations */
+  sec('OPERATIONS',[['Chainage From','Chainage To','Activity Description','Remarks']],
+    data.operations.length?data.operations.map(function(o){return[o.chainage_from,o.chainage_to,o.activity,o.remarks];}): [['','','','']],
+    {0:{cellWidth:28},1:{cellWidth:28},2:{cellWidth:84},3:{cellWidth:38}});
+
+  /* Signatures */
+  doc.autoTable({
+    startY:doc.lastAutoTable.finalY+1,margin:{left:m,right:m},
+    head:[[{content:'SIGNATURES',colSpan:4,styles:{fillColor:[13,74,42],textColor:[255,255,255],fontStyle:'bold',halign:'center',fontSize:10}}],['Role','Name','Signature','Date']],
+    body:[
+      ['Inspector',data.signatures.inspector.name,data.signatures.inspector.sign,data.signatures.inspector.date],
+      ['Site Agent',data.signatures.site_agent.name,data.signatures.site_agent.sign,data.signatures.site_agent.date],
+      ['R.E./A.R.E',data.signatures.re_are.name,data.signatures.re_are.sign,data.signatures.re_are.date]
+    ],
+    columnStyles:{0:{cellWidth:28,fontStyle:'bold',fillColor:[250,250,248],textColor:[13,74,42]}},
+    headStyles:{fillColor:[212,232,220],textColor:[13,74,42],fontStyle:'bold',fontSize:8.5},
+    styles:{fontSize:9,cellPadding:3,lineColor:[187,187,187],lineWidth:0.3},theme:'grid'
+  });
+
+  /* Footer bar */
+  var fy=doc.lastAutoTable.finalY+4;
+  doc.setFillColor(13,74,42); doc.rect(m,fy,W-m*2,7,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('ISSUE NO: 001',m+3,fy+4.5);
+  doc.text('REV. NO: 003',W/2,fy+4.5,{align:'center'});
+  doc.text('ISSUE DATE: 24/2/2025',W-m-3,fy+4.5,{align:'right'});
+
+  return doc;
+}
+
+/* ──────────────────── GITHUB SAVE ──────────────────── */
+async function saveToGitHub(b64,filename,c){
+  var folder=c.dir?c.dir.replace(/\/+$/,'')+'/':'';
+  var path=folder+filename;
+  var url='https://api.github.com/repos/'+c.usr+'/'+c.repo+'/contents/'+path;
+  var headers={'Authorization':'token '+c.tok,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
+  var sha=null;
+  try{ var chk=await fetch(url,{headers:headers}); if(chk.ok){var j=await chk.json();sha=j.sha;} }catch(e){}
+  var body={message:'Daily works report: '+filename,content:b64};
+  if(sha) body.sha=sha;
+  var res=await fetch(url,{method:'PUT',headers:headers,body:JSON.stringify(body)});
+  if(!res.ok){var err=await res.json();throw new Error(err.message||'GitHub error '+res.status);}
+  return path;
+}
+
+/* ──────────────────── EMAIL ──────────────────── */
+async function sendEmail(b64,filename,data,c){
+  emailjs.init(c.pk);
+  var params={
+    to_email1:'pogeto@kura.go.ke',
+    to_email2:'lowereastern@kura.go.ke',
+    project_name:data.project_name||'(not specified)',
+    contract_no:data.contract_no||'(not specified)',
+    contractor:data.contractor||'(not specified)',
+    date:data.date||'(not specified)',
+    location:data.location||'(not specified)',
+    submitted_at:data.submitted_at,
+    filename:filename,
+    pdf_base64:b64
+  };
+  return await emailjs.send(c.svc,c.tpl,params);
+}
+
+/* ──────────────────── MAIN HANDLER ──────────────────── */
+async function handleSubmit(){
+  var c=cfg();
+  var missing=[];
+  if(!c.pk||!c.svc||!c.tpl) missing.push('EmailJS');
+  if(!c.tok||!c.usr||!c.repo) missing.push('GitHub');
+  if(missing.length){ toast('⚙ Please configure '+missing.join(' and ')+' in Settings first.','err'); openSettings(); return; }
+
+  var data=collectData();
+  var dateStr=data.date||new Date().toISOString().slice(0,10);
+  var cn=(data.contract_no||'KURA').replace(/[^a-zA-Z0-9]/g,'-');
+  var filename='DailyWorks_'+dateStr+'_'+cn+'.pdf';
+
+  setLoading(true);
+  openProgress();
+
+  var s1=addStep('Generating PDF…');
+  var s2=addStep('Saving to GitHub…');
+  var s3=addStep('Emailing to pogeto@kura.go.ke & lowereastern@kura.go.ke…');
+
+  var doc,b64;
+  try {
+    doc=generatePDF(data);
+    b64=doc.output('datauristring').split(',')[1];
+    resolveStep(s1,true,'✓ PDF generated');
+  } catch(e){ resolveStep(s1,false,'✗ PDF failed: '+e.message); setLoading(false); showProgressClose(); return; }
+
+  var ghPath='';
+  try {
+    ghPath=await saveToGitHub(b64,filename,c);
+    resolveStep(s2,true,'✓ Saved to GitHub: '+ghPath);
+  } catch(e){ resolveStep(s2,false,'✗ GitHub failed: '+e.message); }
+
+  try {
+    await sendEmail(b64,filename,data,c);
+    resolveStep(s3,true,'✓ Email sent to both recipients');
+  } catch(e){ resolveStep(s3,false,'✗ Email failed: '+e.message); }
+
+  /* Always trigger local download */
+  doc.save(filename);
+
+  setLoading(false);
+  showProgressClose();
+}
+
+/* ──────────────────── CLEAR ──────────────────── */
 function clearForm(){
   if(!confirm('Clear all fields? This cannot be undone.')) return;
-  document.querySelectorAll('input').forEach(function(i){ i.value=''; });
-  showToast('Form cleared.');
-}
-
-function submitForm(){
-  var data = {
-    meta: { form: 'KURA/MS/FM/029', issue: '001', rev: '003', issue_date: '24/2/2025' },
-    location: g('location'), day: g('day'), date: g('date'),
-    project_name: g('project_name'), contract_no: g('contract_no'),
-    contractor: g('contractor'),
-    sheet_no: g('sheet_no'), sheet_of: g('sheet_of'),
-    time_from: g('time_from'), time_to: g('time_to'),
-    weather: [], plant_equipment: [], materials: [], labour: [], operations: [],
-    signatures: {
-      inspector: { name: g('insp_name'), sign: g('insp_sign'), date: g('insp_date') },
-      site_agent: { name: g('agent_name'), sign: g('agent_sign'), date: g('agent_date') },
-      re_are:    { name: g('re_name'),    sign: g('re_sign'),    date: g('re_date') }
-    },
-    submitted_at: new Date().toISOString()
-  };
-
-  for(var wi=1;wi<=3;wi++){
-    var t=g('w_time'+wi),c=g('w_cond'+wi),r=g('w_rem'+wi);
-    if(t||c||r) data.weather.push({time_duration:t,conditions:c,remarks:r});
-  }
-
-  var sides=['l','r'];
-  for(var pi=1;pi<=5;pi++){
-    sides.forEach(function(s){
-      var d=g('pe_d'+pi+s),p=g('pe_p'+pi+s);
-      if(d||p) data.plant_equipment.push({description:d,plate_no:p,from:g('pe_f'+pi+s),to:g('pe_t'+pi+s)});
-    });
-  }
-
-  for(var mi=1;mi<=5;mi++){
-    var d=g('m_d'+mi);
-    if(d) data.materials.push({description:d,unit:g('m_u'+mi),truck_plate:g('m_p'+mi),capacity_m3:g('m_c'+mi),frequency:g('m_f'+mi),total_qty_del:g('m_q'+mi),remarks:g('m_r'+mi)});
-  }
-
-  for(var li=1;li<=6;li++){
-    sides.forEach(function(s){
-      var p=g('l_p'+li+s),n=g('l_n'+li+s);
-      if(p) data.labour.push({personnel:p,number:n});
-    });
-  }
-
-  for(var oi=1;oi<=6;oi++){
-    var a=g('op_a'+oi);
-    if(a) data.operations.push({chainage_from:g('op_f'+oi),chainage_to:g('op_t'+oi),activity:a,remarks:g('op_r'+oi)});
-  }
-
-  var json = JSON.stringify(data, null, 2);
-  var blob = new Blob([json], {type:'application/json'});
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  var date = data.date || new Date().toISOString().slice(0,10);
-  var cn   = data.contract_no.replace(/[^a-zA-Z0-9]/g,'-') || 'KURA';
-  a.href   = url;
-  a.download = 'DailyWorks_' + date + '_' + cn + '.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
-  showToast('✓ Form exported as JSON successfully!');
+  document.querySelectorAll('#formCard input').forEach(function(i){i.value='';});
+  toast('Form cleared.');
 }
 </script>
 </body>
