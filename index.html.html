@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KURA Daily Works Form | KURA/MS/FM/029</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0d4a2a;
+    --green-mid: #1a6b3a;
+    --green-light: #e8f5ee;
+    --green-accent: #2e8b57;
+    --border: #bbb;
+    --border-light: #ddd;
+    --bg: #f7f7f5;
+    --white: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #555;
+    --cell-bg: #fafaf8;
+    --header-bg: #d4e8dc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ---- TOP NAV ---- */
+  .topbar {
+    background: var(--green-dark);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--green-accent); border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; color: white; letter-spacing: 0.5px;
+  }
+  .topbar-title { font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
+  .topbar-sub { font-size: 11px; opacity: 0.7; margin-top: 1px; }
+  .topbar-actions { display: flex; gap: 10px; }
+  .btn {
+    padding: 7px 18px; border-radius: 5px; font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-outline {
+    background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); }
+  .btn-primary {
+    background: var(--green-accent); color: white;
+  }
+  .btn-primary:hover { background: #267a4c; transform: translateY(-1px); }
+  .btn-print {
+    background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);
+  }
+  .btn-print:hover { background: rgba(255,255,255,0.25); }
+
+  /* ---- MAIN WRAPPER ---- */
+  .outer { padding: 24px 16px 48px; max-width: 980px; margin: 0 auto; }
+
+  /* ---- FORM CARD ---- */
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  /* ---- FORM HEADER ---- */
+  .form-header {
+    display: flex; align-items: center; gap: 18px;
+    padding: 16px 20px; border-bottom: 2px solid var(--green-dark);
+    background: var(--white);
+  }
+  .kura-logo {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 3px solid var(--green-dark);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; overflow: hidden; background: var(--green-light);
+  }
+  .kura-logo svg { width: 60px; height: 60px; }
+  .org-info { flex: 1; }
+  .org-name {
+    font-size: 24px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--green-dark); line-height: 1;
+  }
+  .org-tagline { font-style: italic; font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .form-ref {
+    text-align: right; font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-muted); line-height: 1.8;
+  }
+
+  /* ---- TABLES ---- */
+  .form-body { padding: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  td, th {
+    border: 1px solid var(--border);
+    padding: 4px 7px;
+    vertical-align: middle;
+    font-size: 11.5px;
+  }
+  th {
+    background: var(--header-bg);
+    font-weight: 600;
+    font-size: 11px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    color: var(--green-dark);
+  }
+  .section-title {
+    background: var(--green-dark);
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 6px;
+    text-transform: uppercase;
+  }
+  .label-cell {
+    background: var(--cell-bg);
+    font-weight: 600;
+    font-size: 11px;
+    white-space: nowrap;
+    color: var(--green-dark);
+  }
+  .form-title-row {
+    background: var(--green-light);
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 8px;
+    color: var(--green-dark);
+    text-transform: uppercase;
+  }
+  .italic-note { font-style: italic; font-size: 10.5px; color: var(--text-muted); padding: 5px 7px; }
+
+  /* ---- INPUTS ---- */
+  input[type=text], input[type=date], input[type=time], textarea, select {
+    border: none; outline: none; background: transparent;
+    width: 100%; font-size: 11.5px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text); padding: 1px 2px;
+  }
+  input[type=date]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+  input[type=time]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+  td:has(input):focus-within { background: #f0f8f3; }
+
+  .sheet-inline {
+    display: inline-block;
+    width: 32px;
+    border-bottom: 1.5px solid var(--border);
+    text-align: center;
+    font-size: 11.5px;
+    padding: 0 2px;
+    outline: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    background: transparent;
+    border-top: none; border-left: none; border-right: none;
+  }
+
+  /* ---- SECTION SPACING ---- */
+  .section-block { border-top: 2px solid var(--green-dark); }
+
+  /* ---- SIGN TABLE ---- */
+  .sign-role { background: var(--cell-bg); font-weight: 600; font-size: 11px; color: var(--green-dark); }
+
+  /* ---- FOOTER BAR ---- */
+  .form-footer {
+    display: flex; justify-content: space-between;
+    padding: 8px 16px; background: var(--green-dark);
+    color: white; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* ---- ACTION BAR ---- */
+  .action-bar {
+    display: flex; justify-content: center; gap: 14px;
+    padding: 20px 0 0;
+  }
+  .btn-clear-main {
+    padding: 10px 28px; border-radius: 5px; font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
+    cursor: pointer; background: transparent; border: 1.5px solid var(--border);
+    color: var(--text-muted); transition: all 0.15s;
+  }
+  .btn-clear-main:hover { background: #f0f0f0; }
+  .btn-submit-main {
+    padding: 10px 32px; border-radius: 5px; font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+    cursor: pointer; background: var(--green-dark); color: white;
+    border: none; transition: all 0.15s; letter-spacing: 0.3px;
+  }
+  .btn-submit-main:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,74,42,0.25); }
+  .btn-pdf-main {
+    padding: 10px 28px; border-radius: 5px; font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 500;
+    cursor: pointer; background: #4a3728; color: white;
+    border: none; transition: all 0.15s;
+  }
+  .btn-pdf-main:hover { background: #3a2a1e; transform: translateY(-1px); }
+
+  /* ---- TOAST ---- */
+  .toast {
+    display: none; position: fixed; bottom: 24px; right: 24px;
+    background: var(--green-dark); color: white;
+    padding: 12px 20px; border-radius: 6px;
+    font-size: 13px; z-index: 999;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    animation: slideup 0.25s ease;
+  }
+  @keyframes slideup { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ---- PRINT STYLES ---- */
+  @media print {
+    .topbar, .action-bar, .toast { display: none !important; }
+    body { background: white; }
+    .outer { padding: 0; max-width: 100%; }
+    .form-card { box-shadow: none; border: none; }
+    .org-name { font-size: 20px; }
+    td, th { font-size: 10px; }
+    input[type=text], input[type=date], input[type=time] { font-size: 10px; }
+    .section-title { font-size: 11px; padding: 4px; }
+    @page { margin: 10mm; size: A4 portrait; }
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 640px) {
+    .topbar-actions .btn-print { display: none; }
+    .org-name { font-size: 16px; }
+    .form-ref { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAVIGATION -->
+<nav class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">KURA</div>
+    <div>
+      <div class="topbar-title">Daily Works Report</div>
+      <div class="topbar-sub">KURA/MS/FM/029 &nbsp;|&nbsp; Rev. 003</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-print" onclick="window.print()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print / PDF
+    </button>
+    <button class="btn btn-primary" onclick="submitForm()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      Submit &amp; Export
+    </button>
+  </div>
+</nav>
+
+<div class="outer">
+<div class="form-card">
+
+  <!-- HEADER -->
+  <div class="form-header">
+    <div class="kura-logo">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="28" fill="#0d4a2a" stroke="#2e8b57" stroke-width="2"/>
+        <ellipse cx="30" cy="38" rx="18" ry="8" fill="#2e8b57" opacity="0.7"/>
+        <rect x="14" y="28" width="32" height="4" rx="2" fill="#7ec89a"/>
+        <rect x="10" y="32" width="40" height="3" rx="1.5" fill="#5ab07a"/>
+        <text x="30" y="24" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="white">KURA</text>
+        <circle cx="30" cy="30" r="28" fill="none" stroke="#5ab07a" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="org-info">
+      <div class="org-name">Kenya Urban Roads Authority</div>
+      <div class="org-tagline">Transforming Urban Mobility</div>
+    </div>
+    <div class="form-ref">
+      KURA/MS/FM/029<br>
+      Issue No: 001<br>
+      Rev. No: 003<br>
+      Issue Date: 24/2/2025
+    </div>
+  </div>
+
+  <div class="form-body">
+
+    <!-- PROJECT INFO TABLE -->
+    <table>
+      <tr>
+        <td class="label-cell" rowspan="3" style="width:100px;">Location/<br>Region</td>
+        <td colspan="4"><input type="text" id="location" placeholder="Location / Region"></td>
+        <td class="label-cell" style="width:38px;">Day:</td>
+        <td style="width:90px;"><input type="text" id="day" placeholder="e.g. Monday"></td>
+      </tr>
+      <tr>
+        <td class="label-cell" style="width:90px;">Project Name:</td>
+        <td colspan="3"><input type="text" id="project_name" placeholder="Project name"></td>
+        <td class="label-cell">Date:</td>
+        <td><input type="date" id="date"></td>
+      </tr>
+      <tr>
+        <td class="label-cell">Contract No.:</td>
+        <td style="width:140px;"><input type="text" id="contract_no" placeholder="Contract number"></td>
+        <td class="label-cell" style="width:75px;">Contractor:</td>
+        <td colspan="3"><input type="text" id="contractor" placeholder="Contractor name"></td>
+      </tr>
+      <tr>
+        <td colspan="7" class="form-title-row">
+          DAILY WORKS REPORT &nbsp;&nbsp;
+          Sheet No.&nbsp;<input class="sheet-inline" type="text" id="sheet_no" maxlength="4">&nbsp;
+          of&nbsp;<input class="sheet-inline" type="text" id="sheet_of" maxlength="4">
+        </td>
+      </tr>
+      <tr>
+        <td class="label-cell">Time of Operation</td>
+        <td class="label-cell">From:</td>
+        <td style="width:90px;"><input type="time" id="time_from"></td>
+        <td class="label-cell" style="width:25px;">To:</td>
+        <td colspan="3"><input type="time" id="time_to"></td>
+      </tr>
+    </table>
+
+    <!-- WEATHER -->
+    <div class="section-block">
+      <table>
+        <tr><td colspan="3" class="section-title">Weather</td></tr>
+        <tr><td colspan="3" class="italic-note">State significant changes in weather conditions during the day (whether rainy, sunny, temperature or dry) and readings on the rain gauge in mm if any.</td></tr>
+        <tr>
+          <th style="width:160px;">Time Duration</th>
+          <th>Weather Conditions</th>
+          <th style="width:220px;">Remarks</th>
+        </tr>
+        <tr><td style="height:26px;"><input type="text" id="w_time1" placeholder="e.g. 07:00–10:00"></td><td><input type="text" id="w_cond1" placeholder="e.g. Sunny, dry"></td><td><input type="text" id="w_rem1"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="w_time2"></td><td><input type="text" id="w_cond2"></td><td><input type="text" id="w_rem2"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="w_time3"></td><td><input type="text" id="w_cond3"></td><td><input type="text" id="w_rem3"></td></tr>
+      </table>
+    </div>
+
+    <!-- PLANT AND EQUIPMENT -->
+    <div class="section-block">
+      <table>
+        <tr><td colspan="8" class="section-title">Plant and Equipment</td></tr>
+        <tr>
+          <th rowspan="2" style="width:175px;">Description</th>
+          <th rowspan="2" style="width:90px;">Plate No.</th>
+          <th colspan="2">Time Deployed</th>
+          <th rowspan="2" style="width:175px;">Description</th>
+          <th rowspan="2" style="width:90px;">Plate No.</th>
+          <th colspan="2">Time Deployed</th>
+        </tr>
+        <tr>
+          <th style="width:72px;">From</th><th style="width:72px;">To</th>
+          <th style="width:72px;">From</th><th style="width:72px;">To</th>
+        </tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d1l" placeholder="Equipment description"></td><td><input type="text" id="pe_p1l" placeholder="Plate no."></td><td><input type="time" id="pe_f1l"></td><td><input type="time" id="pe_t1l"></td><td><input type="text" id="pe_d1r"></td><td><input type="text" id="pe_p1r"></td><td><input type="time" id="pe_f1r"></td><td><input type="time" id="pe_t1r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d2l"></td><td><input type="text" id="pe_p2l"></td><td><input type="time" id="pe_f2l"></td><td><input type="time" id="pe_t2l"></td><td><input type="text" id="pe_d2r"></td><td><input type="text" id="pe_p2r"></td><td><input type="time" id="pe_f2r"></td><td><input type="time" id="pe_t2r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d3l"></td><td><input type="text" id="pe_p3l"></td><td><input type="time" id="pe_f3l"></td><td><input type="time" id="pe_t3l"></td><td><input type="text" id="pe_d3r"></td><td><input type="text" id="pe_p3r"></td><td><input type="time" id="pe_f3r"></td><td><input type="time" id="pe_t3r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d4l"></td><td><input type="text" id="pe_p4l"></td><td><input type="time" id="pe_f4l"></td><td><input type="time" id="pe_t4l"></td><td><input type="text" id="pe_d4r"></td><td><input type="text" id="pe_p4r"></td><td><input type="time" id="pe_f4r"></td><td><input type="time" id="pe_t4r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="pe_d5l"></td><td><input type="text" id="pe_p5l"></td><td><input type="time" id="pe_f5l"></td><td><input type="time" id="pe_t5l"></td><td><input type="text" id="pe_d5r"></td><td><input type="text" id="pe_p5r"></td><td><input type="time" id="pe_f5r"></td><td><input type="time" id="pe_t5r"></td></tr>
+      </table>
+    </div>
+
+    <!-- MATERIALS -->
+    <div class="section-block">
+      <table>
+        <tr><td colspan="7" class="section-title">Materials Delivered to Site</td></tr>
+        <tr>
+          <th style="width:170px;">Description</th>
+          <th style="width:55px;">Unit</th>
+          <th style="width:100px;">Truck Plate No.</th>
+          <th style="width:110px;">Truck Capacity (M³)</th>
+          <th style="width:50px;">Freq</th>
+          <th style="width:90px;">Total Qty Del</th>
+          <th>Remarks</th>
+        </tr>
+        <tr><td style="height:26px;"><input type="text" id="m_d1" placeholder="Material description"></td><td><input type="text" id="m_u1"></td><td><input type="text" id="m_p1"></td><td><input type="text" id="m_c1"></td><td><input type="text" id="m_f1"></td><td><input type="text" id="m_q1"></td><td><input type="text" id="m_r1"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="m_d2"></td><td><input type="text" id="m_u2"></td><td><input type="text" id="m_p2"></td><td><input type="text" id="m_c2"></td><td><input type="text" id="m_f2"></td><td><input type="text" id="m_q2"></td><td><input type="text" id="m_r2"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="m_d3"></td><td><input type="text" id="m_u3"></td><td><input type="text" id="m_p3"></td><td><input type="text" id="m_c3"></td><td><input type="text" id="m_f3"></td><td><input type="text" id="m_q3"></td><td><input type="text" id="m_r3"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="m_d4"></td><td><input type="text" id="m_u4"></td><td><input type="text" id="m_p4"></td><td><input type="text" id="m_c4"></td><td><input type="text" id="m_f4"></td><td><input type="text" id="m_q4"></td><td><input type="text" id="m_r4"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="m_d5"></td><td><input type="text" id="m_u5"></td><td><input type="text" id="m_p5"></td><td><input type="text" id="m_c5"></td><td><input type="text" id="m_f5"></td><td><input type="text" id="m_q5"></td><td><input type="text" id="m_r5"></td></tr>
+      </table>
+    </div>
+
+    <!-- LABOUR -->
+    <div class="section-block">
+      <table>
+        <tr><td colspan="4" class="section-title">Labour</td></tr>
+        <tr>
+          <th style="width:240px;">Personnel</th>
+          <th style="width:80px;">No.</th>
+          <th style="width:240px;">Personnel</th>
+          <th style="width:80px;">No.</th>
+        </tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p1l" placeholder="e.g. Skilled labourers"></td><td><input type="text" id="l_n1l" placeholder="0"></td><td><input type="text" id="l_p1r"></td><td><input type="text" id="l_n1r" placeholder="0"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p2l"></td><td><input type="text" id="l_n2l"></td><td><input type="text" id="l_p2r"></td><td><input type="text" id="l_n2r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p3l"></td><td><input type="text" id="l_n3l"></td><td><input type="text" id="l_p3r"></td><td><input type="text" id="l_n3r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p4l"></td><td><input type="text" id="l_n4l"></td><td><input type="text" id="l_p4r"></td><td><input type="text" id="l_n4r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p5l"></td><td><input type="text" id="l_n5l"></td><td><input type="text" id="l_p5r"></td><td><input type="text" id="l_n5r"></td></tr>
+        <tr><td style="height:26px;"><input type="text" id="l_p6l"></td><td><input type="text" id="l_n6l"></td><td><input type="text" id="l_p6r"></td><td><input type="text" id="l_n6r"></td></tr>
+      </table>
+    </div>
+
+    <!-- OPERATIONS -->
+    <div class="section-block">
+      <table>
+        <tr><td colspan="4" class="section-title">Operations</td></tr>
+        <tr>
+          <th colspan="2" style="width:180px;">Chainage</th>
+          <th rowspan="2">Activity Description</th>
+          <th rowspan="2" style="width:200px;">Remarks</th>
+        </tr>
+        <tr>
+          <th style="width:90px;">From</th>
+          <th style="width:90px;">To</th>
+        </tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f1" placeholder="From"></td><td><input type="text" id="op_t1" placeholder="To"></td><td><input type="text" id="op_a1" placeholder="Activity description"></td><td><input type="text" id="op_r1"></td></tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f2"></td><td><input type="text" id="op_t2"></td><td><input type="text" id="op_a2"></td><td><input type="text" id="op_r2"></td></tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f3"></td><td><input type="text" id="op_t3"></td><td><input type="text" id="op_a3"></td><td><input type="text" id="op_r3"></td></tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f4"></td><td><input type="text" id="op_t4"></td><td><input type="text" id="op_a4"></td><td><input type="text" id="op_r4"></td></tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f5"></td><td><input type="text" id="op_t5"></td><td><input type="text" id="op_a5"></td><td><input type="text" id="op_r5"></td></tr>
+        <tr><td style="height:28px;"><input type="text" id="op_f6"></td><td><input type="text" id="op_t6"></td><td><input type="text" id="op_a6"></td><td><input type="text" id="op_r6"></td></tr>
+      </table>
+    </div>
+
+    <!-- SIGNATURES -->
+    <div class="section-block">
+      <table>
+        <tr>
+          <th style="width:100px;"></th>
+          <th style="width:210px;">Name</th>
+          <th style="width:210px;">Sign</th>
+          <th>Date</th>
+        </tr>
+        <tr>
+          <td class="sign-role">Inspector</td>
+          <td><input type="text" id="insp_name" placeholder="Full name"></td>
+          <td><input type="text" id="insp_sign" placeholder="Type name as signature"></td>
+          <td><input type="date" id="insp_date"></td>
+        </tr>
+        <tr>
+          <td class="sign-role">Site Agent</td>
+          <td><input type="text" id="agent_name" placeholder="Full name"></td>
+          <td><input type="text" id="agent_sign" placeholder="Type name as signature"></td>
+          <td><input type="date" id="agent_date"></td>
+        </tr>
+        <tr>
+          <td class="sign-role">R.E. / A.R.E</td>
+          <td><input type="text" id="re_name" placeholder="Full name"></td>
+          <td><input type="text" id="re_sign" placeholder="Type name as signature"></td>
+          <td><input type="date" id="re_date"></td>
+        </tr>
+      </table>
+    </div>
+
+  </div><!-- /form-body -->
+
+  <!-- FORM FOOTER -->
+  <div class="form-footer">
+    <span>ISSUE NO: 001</span>
+    <span>REV. NO: 003</span>
+    <span>ISSUE DATE: 24/2/2025</span>
+  </div>
+
+</div><!-- /form-card -->
+
+<!-- ACTION BUTTONS -->
+<div class="action-bar">
+  <button class="btn-clear-main" onclick="clearForm()">Clear Form</button>
+  <button class="btn-pdf-main" onclick="window.print()">
+    🖨 Print / Save as PDF
+  </button>
+  <button class="btn-submit-main" onclick="submitForm()">✓ Submit &amp; Export JSON</button>
+</div>
+
+</div><!-- /outer -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+function g(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  setTimeout(function(){ t.style.display='none'; }, 3500);
+}
+
+function clearForm(){
+  if(!confirm('Clear all fields? This cannot be undone.')) return;
+  document.querySelectorAll('input').forEach(function(i){ i.value=''; });
+  showToast('Form cleared.');
+}
+
+function submitForm(){
+  var data = {
+    meta: { form: 'KURA/MS/FM/029', issue: '001', rev: '003', issue_date: '24/2/2025' },
+    location: g('location'), day: g('day'), date: g('date'),
+    project_name: g('project_name'), contract_no: g('contract_no'),
+    contractor: g('contractor'),
+    sheet_no: g('sheet_no'), sheet_of: g('sheet_of'),
+    time_from: g('time_from'), time_to: g('time_to'),
+    weather: [], plant_equipment: [], materials: [], labour: [], operations: [],
+    signatures: {
+      inspector: { name: g('insp_name'), sign: g('insp_sign'), date: g('insp_date') },
+      site_agent: { name: g('agent_name'), sign: g('agent_sign'), date: g('agent_date') },
+      re_are:    { name: g('re_name'),    sign: g('re_sign'),    date: g('re_date') }
+    },
+    submitted_at: new Date().toISOString()
+  };
+
+  for(var wi=1;wi<=3;wi++){
+    var t=g('w_time'+wi),c=g('w_cond'+wi),r=g('w_rem'+wi);
+    if(t||c||r) data.weather.push({time_duration:t,conditions:c,remarks:r});
+  }
+
+  var sides=['l','r'];
+  for(var pi=1;pi<=5;pi++){
+    sides.forEach(function(s){
+      var d=g('pe_d'+pi+s),p=g('pe_p'+pi+s);
+      if(d||p) data.plant_equipment.push({description:d,plate_no:p,from:g('pe_f'+pi+s),to:g('pe_t'+pi+s)});
+    });
+  }
+
+  for(var mi=1;mi<=5;mi++){
+    var d=g('m_d'+mi);
+    if(d) data.materials.push({description:d,unit:g('m_u'+mi),truck_plate:g('m_p'+mi),capacity_m3:g('m_c'+mi),frequency:g('m_f'+mi),total_qty_del:g('m_q'+mi),remarks:g('m_r'+mi)});
+  }
+
+  for(var li=1;li<=6;li++){
+    sides.forEach(function(s){
+      var p=g('l_p'+li+s),n=g('l_n'+li+s);
+      if(p) data.labour.push({personnel:p,number:n});
+    });
+  }
+
+  for(var oi=1;oi<=6;oi++){
+    var a=g('op_a'+oi);
+    if(a) data.operations.push({chainage_from:g('op_f'+oi),chainage_to:g('op_t'+oi),activity:a,remarks:g('op_r'+oi)});
+  }
+
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  var date = data.date || new Date().toISOString().slice(0,10);
+  var cn   = data.contract_no.replace(/[^a-zA-Z0-9]/g,'-') || 'KURA';
+  a.href   = url;
+  a.download = 'DailyWorks_' + date + '_' + cn + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast('✓ Form exported as JSON successfully!');
+}
+</script>
+</body>
+</html>
