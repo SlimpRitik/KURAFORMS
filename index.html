@@ -887,8 +887,8 @@ async function sendEmail(b64,filename,data,c){
     localStorage.setItem('kura_sender_email', senderEmail.trim());
   }
 
-  emailjs.init(c.pk);
-  return await emailjs.send(c.svc, c.tpl, {
+emailjs.init('nm03ftOAiXO5NSDMp');
+  return await emailjs.send('service_04g5ijg', 'template_ohk2rl8', {
     from_email:   senderEmail,               // ← sender's email (auto from device)
     to_email:     'mohmwende354@gmail.com',       // ← primary recipient (To:)
     cc_email1:    'dmaingi@kura.go.ke', // ← first CC
