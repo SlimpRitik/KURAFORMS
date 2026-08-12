@@ -691,7 +691,13 @@ function setLoading(on){
   document.getElementById('btnSubmit').disabled=on;
 }
 
-function cfg(){ try{return JSON.parse(localStorage.getItem('kura_cfg')||'{}');}catch(e){return{};} }
+function cfg(){
+  return {
+    pk:  'nm03ftOAiXO5NSDMp',
+    svc: 'service_04g5ijg',
+    tpl: 'template_ohk2rl8'
+  };
+}
 
 function collectData(){
   var d={
