@@ -907,10 +907,10 @@ async function sendEmail(b64,filename,data,c){
 
 async function handleSubmit(){
   var c=cfg();
-  var missing=[];
-  if(!c.pk||!c.svc||!c.tpl)missing.push('EmailJS');
-  if(!c.tok||!c.usr||!c.repo)missing.push('GitHub');
-  if(missing.length){toast('⚙ Please configure '+missing.join(' and ')+' in Settings first.','err');return;}
+  if(!c.pk||!c.svc||!c.tpl){
+    toast('⚙ Please configure EmailJS in Settings first.','err');
+    return;
+  }
   var data=collectData();
   var dateStr=data.date||new Date().toISOString().slice(0,10);
   var cn=(data.contract_no||'KURA').replace(/[^a-zA-Z0-9]/g,'-');
@@ -919,7 +919,9 @@ async function handleSubmit(){
   var doc,b64;
   try{doc=generatePDF(data);b64=doc.output('datauristring').split(',')[1];}
   catch(e){toast('✗ PDF failed: '+e.message,'err');setLoading(false);return;}
+  if(c.tok&&c.usr&&c.repo){
   try{await saveToGitHub(b64,filename,c);}catch(e){toast('✗ GitHub failed: '+e.message,'err');}
+  }
   try{await sendEmail(b64,filename,data,c);toast('✓ Submitted successfully.');}
   catch(e){toast('✗ Email failed: '+e.message,'err');}
   doc.save(filename);
