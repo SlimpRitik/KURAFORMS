@@ -879,8 +879,30 @@ async function saveToGitHub(b64,filename,c){
 }
 
 async function sendEmail(b64,filename,data,c){
+  // Get sender email from device/browser storage, prompt once if not set
+  var senderEmail = localStorage.getItem('kura_sender_email');
+  if(!senderEmail){
+    senderEmail = prompt('Enter your email address (saved on this device for future submissions):');
+    if(!senderEmail){ throw new Error('Sender email is required.'); }
+    localStorage.setItem('kura_sender_email', senderEmail.trim());
+  }
+
   emailjs.init(c.pk);
-  return await emailjs.send(c.svc,c.tpl,{to_email1:'pogeto@kura.go.ke',to_email2:'lowereastern@kura.go.ke',project_name:data.project_name||'(not specified)',contract_no:data.contract_no||'(not specified)',contractor:data.contractor||'(not specified)',date:data.date||'(not specified)',location:data.location||'(not specified)',submitted_at:data.submitted_at,filename:filename,pdf_base64:b64});
+  return await emailjs.send(c.svc, c.tpl, {
+    from_email:   senderEmail,               // ← sender's email (auto from device)
+    to_email:     'pogeto@kura.go.ke',       // ← primary recipient (To:)
+    cc_email1:    'lowereastern@kura.go.ke', // ← first CC
+    cc_email2:    'thirdperson@kura.go.ke',  // ← second CC
+    project_name: data.project_name || '(not specified)',
+    contract_no:  data.contract_no  || '(not specified)',
+    contractor:   data.contractor   || '(not specified)',
+    date:         data.date         || '(not specified)',
+    location:     data.location     || '(not specified)',
+    submitted_at: data.submitted_at,
+    filename:     filename,
+    pdf_base64:   b64
+  });
+}
 }
 
 async function handleSubmit(){
